@@ -34,4 +34,26 @@ public class GamesController : ControllerBase
 
         return Ok(game);
     }
+    [HttpPost("{id}/moves")]
+public IActionResult MakeMove(
+    Guid id,
+    [FromBody] MoveRequest request)
+{
+    try
+    {
+        var game = _gameService.MakeMove(
+            id,
+            request.Row,
+            request.Column);
+
+        if (game == null)
+            return NotFound();
+
+        return Ok(game);
+    }
+    catch (InvalidOperationException ex)
+    {
+        return BadRequest(ex.Message);
+    }
+}
 }
